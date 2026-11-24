@@ -40,7 +40,7 @@
 ## Installation
 
 ### Download Release
-1. Download **`LifeBar-v1.1.1.dmg`** from [GitHub Releases](https://github.com/passs0/LifeBar/releases/latest) and drag **`LifeBar.app`** to `/Applications`.
+1. Download **`LifeBar-v1.1.2.dmg`** from [GitHub Releases](https://github.com/passs0/LifeBar/releases/latest) and drag **`LifeBar.app`** to `/Applications`.
 2. On first launch, right-click `LifeBar.app` ➔ **Open**, or run `xattr -cr /Applications/LifeBar.app`.
 
 ### Build from Source

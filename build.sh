@@ -23,15 +23,18 @@ chmod +x "$MACOS_DIR/LifeBar"
 strip -rSTx "$MACOS_DIR/LifeBar"
 cp "$DIR/Info.plist" "$CONTENTS_DIR/Info.plist"
 
-if [ -d "$DIR/assets/LifeBar.icon.xcassets" ]; then
+if [ -d "$DIR/assets/LifeBar.icon" ]; then
     if xcrun --find actool >/dev/null 2>&1; then
         echo "==> Compiling the Light, Dark, Clear, and Tinted app icon variants..."
         PARTIAL_PLIST="$(mktemp "$APP_DIR/icon-partial.XXXXXX")"
-        xcrun actool "$DIR/assets/LifeBar.icon.xcassets" \
+        xcrun actool "$DIR/assets/LifeBar.icon" \
             --compile "$RESOURCES_DIR" \
             --platform macosx \
             --minimum-deployment-target 13.0 \
             --app-icon LifeBar \
+            --enable-on-demand-resources NO \
+            --development-region en \
+            --target-device mac \
             --output-partial-info-plist "$PARTIAL_PLIST" \
             --output-format human-readable-text
         python3 - "$PARTIAL_PLIST" "$CONTENTS_DIR/Info.plist" <<'PY'
