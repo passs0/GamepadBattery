@@ -4,7 +4,6 @@ import ServiceManagement
 public struct MenuView: View {
     @ObservedObject var manager = ControllerManager.shared
     @State private var launchAtLogin: Bool = (SMAppService.mainApp.status == .enabled)
-    @State private var isSettingsExpanded = false
     public var previewControllers: [ControllerDevice]? = nil
 
     private var activeControllers: [ControllerDevice] {
@@ -17,124 +16,91 @@ public struct MenuView: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Header
             headerView
                 .padding(.horizontal, 16)
-                .padding(.top, 14)
-                .padding(.bottom, 10)
+                .padding(.top, 12)
+                .padding(.bottom, 8)
 
             Divider()
                 .opacity(0.4)
 
-            // Controllers List or Empty State
             ScrollView(showsIndicators: activeControllers.count > 3) {
-                VStack(spacing: 8) {
+                VStack(spacing: 4) {
                     if activeControllers.isEmpty {
                         emptyStateView
-                            .padding(.vertical, 16)
+                            .padding(.vertical, 14)
                     } else {
                         ForEach(activeControllers) { controller in
                             controllerCard(controller)
                         }
-                        .padding(.vertical, 8)
+                        .padding(.vertical, 6)
                     }
                 }
             }
-            .frame(maxHeight: 220)
-            .padding(.horizontal, 12)
+            .frame(maxHeight: 210)
+            .padding(.horizontal, 10)
 
             Divider()
                 .opacity(0.4)
 
-            DisclosureGroup("Settings", isExpanded: $isSettingsExpanded) {
-                VStack(alignment: .leading, spacing: 2) {
-                    // Show Percentage in Menu Bar
-                    MenuToggleRow(
-                        icon: "percent",
-                        iconColor: .secondary,
-                        title: "Show Battery Percentage",
-                        isOn: $manager.showPercentageInMenuBar
-                    )
+            VStack(alignment: .leading, spacing: 2) {
+                MenuToggleRow(
+                    icon: "percent",
+                    iconColor: .secondary,
+                    title: "Show Battery Percentage",
+                    isOn: $manager.showPercentageInMenuBar
+                )
 
-                    // Low Battery Alert Threshold Slider
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "slider.horizontal.3")
-                                .foregroundColor(.secondary)
-                                .frame(width: 20)
+                HStack(spacing: 10) {
+                    Image(systemName: "battery.25")
+                        .foregroundColor(.secondary)
+                        .frame(width: 20)
 
-                            Text("Low Battery Alert")
-                                .font(.body)
-                                .foregroundColor(.primary)
+                    Text("Low Battery Alert")
+                        .font(.body)
 
-                            Spacer()
+                    Spacer()
 
-                            Text("\(manager.lowBatteryThreshold)%")
-                                .font(.callout.monospacedDigit())
-                                .foregroundColor(.secondary)
+                    Picker("", selection: $manager.lowBatteryThreshold) {
+                        ForEach([10, 15, 20, 25, 30], id: \.self) { pct in
+                            Text("\(pct)%").tag(pct)
                         }
-
-                        HStack(spacing: 8) {
-                            Text("5%")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-
-                            Slider(
-                                value: Binding(
-                                    get: { Double(manager.lowBatteryThreshold) },
-                                    set: { manager.lowBatteryThreshold = Int($0) }
-                                ),
-                                in: 5...35,
-                                step: 5
-                            )
-                            .controlSize(.small)
-                            .accessibilityLabel("Low battery alert threshold")
-                            .accessibilityValue(Text("\(manager.lowBatteryThreshold) percent"))
-
-                            Text("35%")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.leading, 30)
-                        .padding(.trailing, 4)
                     }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-
-                    // Launch at Login Switch
-                    MenuToggleRow(
-                        icon: "person.crop.circle.badge.checkmark",
-                        iconColor: .secondary,
-                        title: "Open at Login",
-                        isOn: Binding(
-                            get: { launchAtLogin },
-                            set: { newValue in
-                                launchAtLogin = newValue
-                                setLaunchAtLogin(enabled: newValue)
-                            }
-                        )
-                    )
-
-                    // Open System Settings Game Controller Pane
-                    MenuActionRow(
-                        icon: "gearshape",
-                        iconColor: .secondary,
-                        title: "Game Controller Settings…"
-                    ) {
-                        openGameControllerSettings()
-                    }
+                    .pickerStyle(.menu)
+                    .labelsHidden()
+                    .fixedSize()
                 }
-                .padding(.top, 6)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+
+                MenuToggleRow(
+                    icon: "arrow.up.right.square",
+                    iconColor: .secondary,
+                    title: "Open at Login",
+                    isOn: Binding(
+                        get: { launchAtLogin },
+                        set: { newValue in
+                            launchAtLogin = newValue
+                            setLaunchAtLogin(enabled: newValue)
+                        }
+                    )
+                )
             }
-            .font(.body)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 6)
 
             Divider()
                 .opacity(0.4)
 
-            // Footer Quit Action
-            HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                MenuActionRow(
+                    icon: "gearshape",
+                    iconColor: .secondary,
+                    title: "Game Controller Settings…"
+                ) {
+                    openGameControllerSettings()
+                }
+
                 MenuActionRow(
                     icon: "power",
                     iconColor: .secondary,
@@ -150,7 +116,7 @@ public struct MenuView: View {
             .padding(.horizontal, 6)
             .padding(.vertical, 6)
         }
-        .frame(width: 320)
+        .frame(width: 300)
         .onAppear {
             manager.refreshControllers()
             launchAtLogin = (SMAppService.mainApp.status == .enabled)
@@ -159,40 +125,11 @@ public struct MenuView: View {
 
     // MARK: - Header
     private var headerView: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "gamecontroller")
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.secondary)
-
+        HStack {
             Text("Game Controllers")
                 .font(.headline)
                 .foregroundColor(.primary)
-
             Spacer()
-
-            if activeControllers.isEmpty {
-                Text("No Devices")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 7)
-                    .padding(.vertical, 2)
-                    .background(Color.primary.opacity(0.06))
-                    .clipShape(Capsule())
-            } else {
-                HStack(spacing: 4.5) {
-                    Circle()
-                        .fill(Color.green)
-                        .frame(width: 6, height: 6)
-
-                    Text("\(activeControllers.count) Connected")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 2.5)
-                .background(Color.primary.opacity(0.06))
-                .clipShape(Capsule())
-            }
         }
     }
 
