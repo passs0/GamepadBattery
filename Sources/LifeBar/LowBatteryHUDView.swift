@@ -45,17 +45,7 @@ public struct LowBatteryHUDView: View {
         .padding(.trailing, 16)
         .padding(.vertical, 8)
         .frame(width: 296, height: 52)
-        .background(
-            ZStack {
-                // Frosted translucent HUD glass capsule with explicit CALayer corner clipping
-                VisualEffectBlur(material: .hudWindow, blendingMode: .withinWindow, cornerRadius: 26)
-
-                // Delicate Apple specular inner rim
-                Capsule()
-                    .strokeBorder(Color.white.opacity(0.18), lineWidth: 0.5)
-            }
-        )
-        .clipShape(Capsule())
+        .modifier(HUDGlassModifier())
         .contentShape(Capsule())
         .onTapGesture {
             onDismiss?()
@@ -133,5 +123,24 @@ struct VisualEffectBlur: NSViewRepresentable {
         nsView.wantsLayer = true
         nsView.layer?.cornerRadius = cornerRadius
         nsView.layer?.masksToBounds = true
+    }
+}
+
+private struct HUDGlassModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(macOS 26.0, *) {
+            content
+                .glassEffect(.regular, in: Capsule())
+        } else {
+            content
+                .background(
+                    ZStack {
+                        VisualEffectBlur(material: .hudWindow, blendingMode: .withinWindow, cornerRadius: 26)
+                        Capsule()
+                            .strokeBorder(Color.white.opacity(0.18), lineWidth: 0.5)
+                    }
+                )
+                .clipShape(Capsule())
+        }
     }
 }
