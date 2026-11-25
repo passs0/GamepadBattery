@@ -5,14 +5,12 @@
 <h1 align="center">LifeBar</h1>
 
 <p align="center">
-  <strong>Never let your controller die mid-game.</strong><br/>
-  Native macOS menu bar battery monitor & low-battery HUD for PlayStation DualSense, Xbox, Nintendo Switch, and MFi controllers.
+  A lightweight macOS menu bar battery monitor and low-battery HUD for PlayStation, Xbox, Nintendo Switch, and MFi controllers.
 </p>
 
 <p align="center">
   <a href="https://github.com/passs0/LifeBar/releases/latest"><img src="https://img.shields.io/github/v/release/passs0/LifeBar?label=Latest%20Release&color=007AFF" alt="Latest Release" /></a>
   <img src="https://img.shields.io/badge/macOS-13.0%2B%20%7C%20Apple%20Silicon%20%26%20Intel-black?logo=apple" alt="macOS 13.0+" />
-  <img src="https://img.shields.io/badge/framework-GameController%20%7C%20AppKit%20%7C%20SwiftUI-blue" alt="Frameworks" />
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License" /></a>
 </p>
 
@@ -24,31 +22,30 @@
 
 ---
 
-> [!NOTE]
-> **AI-Generated Project Disclosure**
-> **LifeBar** (including its Swift architecture, `GameController` observation, non-activating HUD panel, and Apple HIG squircle icon) is an **AI-generated project** created with **Antigravity** (Google DeepMind).
+## What it does
 
----
+- **Menu bar battery status:** Sits quietly in the menu bar (`LSUIElement`) with an optional live percentage readout and hover tooltip.
+- **Broad controller support:** Tracks Sony (DualSense, DualShock 4), Xbox, Nintendo (Switch Pro, Joy-Con), and MFi/HID controllers via `GameController.framework`.
+- **Non-activating low-battery HUD:** Shows a floating capsule alert when a controller drops below your threshold (5%–35%) without stealing focus from full-screen games.
+- **Launch at Login:** Uses `SMAppService` and refreshes automatically after sleep/wake.
 
-## Features
+## Install
 
-- **Menu Bar Status Item (`LSUIElement`):** Sits quietly in your menu bar using Apple's `gamecontroller` SF Symbol with optional live percentage display, hover tooltip, and zero Dock clutter.
-- **Broad Controller Support:** Uses `GameController.framework` for PlayStation (DualSense, DualSense Edge, DualShock 4), Xbox (Wireless, Elite Series 2), Nintendo (Switch Pro, Joy-Cons), and MFi/HID gamepads.
-- **Non-Activating Low-Battery HUD:** Floating frosted capsule (`NSPanel`) with Apple's circular gauge ring, alert sound, and Notification Center mirroring that never steals focus from full-screen games.
-- **Smart Threshold & System Integration:** Configurable 5%–35% alert threshold, one-click test button, Launch at Login (`SMAppService`), and automatic refresh on system wake.
+Download **`LifeBar-v1.1.2.dmg`** from [Releases](https://github.com/passs0/LifeBar/releases/latest) and drag `LifeBar.app` to `/Applications`.
 
-## Installation
+If Gatekeeper blocks the first launch:
+```zsh
+xattr -cr /Applications/LifeBar.app
+```
 
-### Download Release
-1. Download **`LifeBar-v1.1.2.dmg`** from [GitHub Releases](https://github.com/passs0/LifeBar/releases/latest) and drag **`LifeBar.app`** to `/Applications`.
-2. On first launch, right-click `LifeBar.app` ➔ **Open**, or run `xattr -cr /Applications/LifeBar.app`.
-
-### Build from Source
+Or build from source:
 ```zsh
 git clone https://github.com/passs0/LifeBar.git && cd LifeBar
 make install
 ```
 
+Built with [Google Antigravity](https://antigravity.google).
+
 ## License
 
-Released under the [MIT License](LICENSE).
+[MIT](LICENSE)

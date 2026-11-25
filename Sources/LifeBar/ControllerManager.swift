@@ -116,23 +116,6 @@ public final class ControllerManager: ObservableObject {
         }
     }
 
-    public func triggerTestAlert() {
-        if let first = controllers.first, let percent = first.batteryPercent {
-            LowBatteryHUDController.shared.show(
-                controllerName: first.name,
-                batteryPercent: min(percent, lowBatteryThreshold),
-                brand: first.brand
-            )
-        } else {
-            // Demo notification matching user screenshot (DualSense with 6%)
-            LowBatteryHUDController.shared.show(
-                controllerName: "DualSense Wireless Controller",
-                batteryPercent: 6,
-                brand: .playStation
-            )
-        }
-    }
-
     public var statusItemText: String? {
         guard showPercentageInMenuBar, let first = controllers.first, let percent = first.batteryPercent else {
             return nil

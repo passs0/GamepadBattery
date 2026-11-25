@@ -48,15 +48,6 @@ public struct MenuView: View {
 
             DisclosureGroup("Settings", isExpanded: $isSettingsExpanded) {
                 VStack(alignment: .leading, spacing: 2) {
-                    // Test Low Battery Alert
-                    MenuActionRow(
-                        icon: "bell.badge",
-                        iconColor: .secondary,
-                        title: "Test Low Battery Alert"
-                    ) {
-                        manager.triggerTestAlert()
-                    }
-
                     // Show Percentage in Menu Bar
                     MenuToggleRow(
                         icon: "percent",
