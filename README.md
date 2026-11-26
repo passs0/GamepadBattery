@@ -26,7 +26,7 @@
 
 - **Menu bar battery status:** Sits quietly in the menu bar (`LSUIElement`) with an optional live percentage readout and hover tooltip.
 - **Broad controller support:** Tracks Sony (DualSense, DualShock 4), Xbox, Nintendo (Switch Pro, Joy-Con), and MFi/HID controllers via `GameController.framework`.
-- **Non-activating low-battery HUD:** Shows a floating capsule alert when a controller drops below your threshold (5%–35%) without stealing focus from full-screen games.
+- **Non-activating low-battery HUD:** Shows a floating capsule alert when a controller drops below your threshold (10%–30%) without stealing focus from full-screen games.
 - **Launch at Login:** Uses `SMAppService` and refreshes automatically after sleep/wake.
 
 ## Install
