@@ -44,7 +44,7 @@ git clone https://github.com/passs0/LifeBar.git && cd LifeBar
 make install
 ```
 
-Built with [Google Antigravity](https://antigravity.google).
+**AI scope:** All code, assets, and documentation were generated with [Google Antigravity](https://antigravity.google); human involvement was limited to direction and hands-on testing.
 
 ## License
 
