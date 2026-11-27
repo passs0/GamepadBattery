@@ -50,7 +50,7 @@ jobs:
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF#refs/tags/v}"
           else
-            VERSION="1.1.1-${GITHUB_SHA::7}"
+            VERSION="1.2.0-${GITHUB_SHA::7}"
           fi
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
 
@@ -66,7 +66,7 @@ jobs:
       - name: Upload DMG Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: LifeBar-${{ steps.get_version.outputs.version }}-macOS
+          name: GamepadBattery-${{ steps.get_version.outputs.version }}-macOS
           path: "*.dmg"
           if-no-files-found: error
 
@@ -75,7 +75,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: "*.dmg"
-          name: "LifeBar v${{ steps.get_version.outputs.version }}"
+          name: "Gamepad Battery v${{ steps.get_version.outputs.version }}"
           draft: false
           prerelease: false
           generate_release_notes: true

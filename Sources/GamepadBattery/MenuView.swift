@@ -104,7 +104,7 @@ public struct MenuView: View {
                 MenuActionRow(
                     icon: "power",
                     iconColor: .secondary,
-                    title: "Quit LifeBar"
+                    title: "Quit Gamepad Battery"
                 ) {
                     NSApplication.shared.terminate(nil)
                 }

@@ -7,12 +7,12 @@ app:
 	@./build.sh
 
 run: app
-	@open build/LifeBar.app
+	@open "build/Gamepad Battery.app"
 
 clean:
 	@rm -rf .build build
 
 install: app
 	@echo "Installing to /Applications..."
-	@cp -R build/LifeBar.app /Applications/
-	@echo "Installed LifeBar to /Applications"
+	@cp -R "build/Gamepad Battery.app" /Applications/
+	@echo "Installed Gamepad Battery to /Applications"

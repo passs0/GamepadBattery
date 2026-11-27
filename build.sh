@@ -4,10 +4,10 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$DIR"
 
-echo "==> Building LifeBar (release)..."
+echo "==> Building Gamepad Battery (release)..."
 swift build -c release
 
-APP_NAME="LifeBar.app"
+APP_NAME="Gamepad Battery.app"
 APP_DIR="$DIR/build/$APP_NAME"
 CONTENTS_DIR="$APP_DIR/Contents"
 MACOS_DIR="$CONTENTS_DIR/MacOS"
@@ -18,20 +18,20 @@ rm -rf "$APP_DIR"
 mkdir -p "$MACOS_DIR"
 mkdir -p "$RESOURCES_DIR"
 
-cp "$DIR/.build/release/LifeBar" "$MACOS_DIR/LifeBar"
-chmod +x "$MACOS_DIR/LifeBar"
-strip -rSTx "$MACOS_DIR/LifeBar"
+cp "$DIR/.build/release/GamepadBattery" "$MACOS_DIR/GamepadBattery"
+chmod +x "$MACOS_DIR/GamepadBattery"
+strip -rSTx "$MACOS_DIR/GamepadBattery"
 cp "$DIR/Info.plist" "$CONTENTS_DIR/Info.plist"
 
-if [ -d "$DIR/assets/LifeBar.icon" ]; then
+if [ -d "$DIR/assets/GamepadBattery.icon" ]; then
     if xcrun --find actool >/dev/null 2>&1; then
         echo "==> Compiling the Light, Dark, Clear, and Tinted app icon variants..."
         PARTIAL_PLIST="$(mktemp "$APP_DIR/icon-partial.XXXXXX")"
-        xcrun actool "$DIR/assets/LifeBar.icon" \
+        xcrun actool "$DIR/assets/GamepadBattery.icon" \
             --compile "$RESOURCES_DIR" \
             --platform macosx \
             --minimum-deployment-target 13.0 \
-            --app-icon LifeBar \
+            --app-icon GamepadBattery \
             --enable-on-demand-resources NO \
             --development-region en \
             --target-device mac \
@@ -58,7 +58,7 @@ fi
 
 # Prefer actool's compact ICNS fallback while keeping all four appearances in
 # Assets.car. Copy the larger static icon only when this machine lacks actool.
-if [ ! -f "$RESOURCES_DIR/LifeBar.icns" ] && [ -f "$DIR/AppIcon.icns" ]; then
+if [ ! -f "$RESOURCES_DIR/GamepadBattery.icns" ] && [ -f "$DIR/AppIcon.icns" ]; then
     cp "$DIR/AppIcon.icns" "$RESOURCES_DIR/AppIcon.icns"
 fi
 

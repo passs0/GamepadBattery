@@ -2,20 +2,20 @@
 import PackageDescription
 
 let package = Package(
-    name: "LifeBar",
+    name: "GamepadBattery",
     platforms: [
         .macOS(.v13)
     ],
     products: [
         .executable(
-            name: "LifeBar",
-            targets: ["LifeBar"]
+            name: "GamepadBattery",
+            targets: ["GamepadBattery"]
         ),
     ],
     targets: [
         .executableTarget(
-            name: "LifeBar",
-            path: "Sources/LifeBar"
+            name: "GamepadBattery",
+            path: "Sources/GamepadBattery"
         ),
     ]
 )
