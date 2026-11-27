@@ -89,7 +89,7 @@ public struct LowBatteryHUDView: View {
             Circle()
                 .trim(from: 0, to: fraction)
                 .stroke(
-                    Color(red: 1.0, green: 0.27, blue: 0.23), // Apple System Red #FF453A
+                    Color.red,
                     style: StrokeStyle(lineWidth: 2.2, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
