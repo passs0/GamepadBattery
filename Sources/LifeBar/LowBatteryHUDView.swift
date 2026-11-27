@@ -7,10 +7,14 @@ public struct LowBatteryHUDView: View {
     public let brand: ControllerBrand
     public var onDismiss: (() -> Void)? = nil
 
-    /// Apple official built-in 3D game controller image from CoreBluetoothUI
-    private var systemControllerImage: NSImage? {
+    /// Apple official built-in 3D game controller image from CoreBluetoothUI (cached)
+    private static let cachedSystemControllerImage: NSImage? = {
         let path = "/System/Library/PrivateFrameworks/CoreBluetoothUI.framework/Versions/A/Resources/Generic-GameController.png"
         return NSImage(contentsOfFile: path)
+    }()
+
+    private var systemControllerImage: NSImage? {
+        Self.cachedSystemControllerImage
     }
 
     public init(controllerName: String, batteryPercent: Int, brand: ControllerBrand, onDismiss: (() -> Void)? = nil) {

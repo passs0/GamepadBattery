@@ -7,6 +7,7 @@ public final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelega
     private var statusItem: NSStatusItem!
     private var popover: NSPopover!
     private var eventMonitor: Any?
+    private var wakeObserver: NSObjectProtocol?
     private var cancellables = Set<AnyCancellable>()
     private var normalImage: NSImage?
     private var activeImage: NSImage?
@@ -67,17 +68,8 @@ public final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelega
             }
             .store(in: &cancellables)
 
-        // Close popover when clicking outside
-        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
-            Task { @MainActor in
-                if let self = self, self.popover.isShown {
-                    self.closePopover()
-                }
-            }
-        }
-
         // Refresh on system wake
-        NSWorkspace.shared.notificationCenter.addObserver(
+        wakeObserver = NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didWakeNotification,
             object: nil,
             queue: .main
@@ -140,16 +132,32 @@ public final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelega
     public func popoverWillShow(_ notification: Notification) {
         updateStatusItemImage(isActive: true)
         statusItem.button?.highlight(true)
+        if eventMonitor == nil {
+            eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
+                Task { @MainActor in
+                    if let self = self, self.popover.isShown {
+                        self.closePopover()
+                    }
+                }
+            }
+        }
     }
 
     public func popoverDidClose(_ notification: Notification) {
         updateStatusItemImage(isActive: false)
         statusItem.button?.highlight(false)
+        if let monitor = eventMonitor {
+            NSEvent.removeMonitor(monitor)
+            eventMonitor = nil
+        }
     }
 
     deinit {
         if let monitor = eventMonitor {
             NSEvent.removeMonitor(monitor)
+        }
+        if let wakeObserver {
+            NSWorkspace.shared.notificationCenter.removeObserver(wakeObserver)
         }
     }
 }

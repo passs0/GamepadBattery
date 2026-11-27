@@ -31,7 +31,7 @@
 
 ## Install
 
-Download **`LifeBar-v1.1.2.dmg`** from [Releases](https://github.com/passs0/LifeBar/releases/latest) and drag `LifeBar.app` to `/Applications`.
+Download **`LifeBar-v1.1.3.dmg`** from [Releases](https://github.com/passs0/LifeBar/releases/latest) and drag `LifeBar.app` to `/Applications`.
 
 If Gatekeeper blocks the first launch:
 ```zsh

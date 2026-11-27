@@ -20,6 +20,8 @@ public final class ControllerManager: ObservableObject {
     }
 
     private var pollTimer: Timer?
+    private var connectObserver: NSObjectProtocol?
+    private var disconnectObserver: NSObjectProtocol?
     private var alertedControllerIDs: Set<String> = []
 
     private init() {
@@ -32,8 +34,18 @@ public final class ControllerManager: ObservableObject {
         refreshControllers()
     }
 
+    deinit {
+        pollTimer?.invalidate()
+        if let connectObserver {
+            NotificationCenter.default.removeObserver(connectObserver)
+        }
+        if let disconnectObserver {
+            NotificationCenter.default.removeObserver(disconnectObserver)
+        }
+    }
+
     private func setupObservers() {
-        NotificationCenter.default.addObserver(
+        connectObserver = NotificationCenter.default.addObserver(
             forName: .GCControllerDidConnect,
             object: nil,
             queue: .main
@@ -43,7 +55,7 @@ public final class ControllerManager: ObservableObject {
             }
         }
 
-        NotificationCenter.default.addObserver(
+        disconnectObserver = NotificationCenter.default.addObserver(
             forName: .GCControllerDidDisconnect,
             object: nil,
             queue: .main
@@ -52,12 +64,19 @@ public final class ControllerManager: ObservableObject {
                 self?.refreshControllers()
             }
         }
+    }
 
-        // Periodic battery refresh timer (every 6 seconds for responsive status changes)
-        pollTimer = Timer.scheduledTimer(withTimeInterval: 6.0, repeats: true) { [weak self] _ in
-            Task { @MainActor in
-                self?.refreshControllers()
+    private func updatePollTimer(hasControllers: Bool) {
+        if hasControllers {
+            guard pollTimer == nil else { return }
+            pollTimer = Timer.scheduledTimer(withTimeInterval: 6.0, repeats: true) { [weak self] _ in
+                Task { @MainActor in
+                    self?.refreshControllers()
+                }
             }
+        } else {
+            pollTimer?.invalidate()
+            pollTimer = nil
         }
     }
 
@@ -93,7 +112,10 @@ public final class ControllerManager: ObservableObject {
             checkLowBattery(for: device)
         }
 
-        self.controllers = updated
+        if updated != self.controllers {
+            self.controllers = updated
+        }
+        updatePollTimer(hasControllers: !updated.isEmpty)
     }
 
     private func checkLowBattery(for device: ControllerDevice) {

@@ -107,10 +107,6 @@ public struct MenuView: View {
                     title: "Quit LifeBar"
                 ) {
                     NSApplication.shared.terminate(nil)
-                } accessory: {
-                    Text("⌘Q")
-                        .font(.system(size: 11, weight: .medium, design: .rounded))
-                        .foregroundColor(.secondary.opacity(0.8))
                 }
             }
             .padding(.horizontal, 6)
