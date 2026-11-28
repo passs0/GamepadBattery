@@ -31,7 +31,7 @@
 
 ## Install
 
-Download **`GamepadBattery-v1.2.1.dmg`** from [Releases](https://github.com/passs0/GamepadBattery/releases/latest) and drag `Gamepad Battery.app` to `/Applications`.
+Download **`GamepadBattery-v1.2.2.dmg`** from [Releases](https://github.com/passs0/GamepadBattery/releases/latest) and drag `Gamepad Battery.app` to `/Applications`.
 
 If Gatekeeper blocks the first launch:
 ```zsh

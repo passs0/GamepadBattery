@@ -4,8 +4,8 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$DIR"
 
-echo "==> Building Gamepad Battery (release)..."
-swift build -c release
+echo "==> Building Gamepad Battery (release, size-optimized, dead-stripped)..."
+swift build -c release -Xswiftc -Osize -Xlinker -dead_strip
 
 APP_NAME="Gamepad Battery.app"
 APP_DIR="$DIR/build/$APP_NAME"
